@@ -1,0 +1,21 @@
+@import "variable";
+@import "base";
+
+.card-text {
+  height: 80px;
+}
+.card-title {
+  text-decoration: none;
+  color: var(text-black);
+}
+.course-detail {
+  display: flex;
+}
+.course-detail > * {
+  margin-left: 30px;
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
