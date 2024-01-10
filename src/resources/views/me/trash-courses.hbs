@@ -1,7 +1,7 @@
 <div class="mt-4">
   <p>
-    <h3>khoá học của tôi</h3>
-    <a href="/me/trash/course">Thùng rác ({{deletedCount}})</a>
+    <h3>Thùng rác</h3>
+    <a href="/me/stored/course">khoá học của tôi</a>
   </p>
   <table class="table mt-4">
     <thead>
@@ -9,7 +9,7 @@
         <th scope="col">#</th>
         <th scope="col">Tên khoá học</th>
         <th scope="col">Level</th>
-        <th scope="col">Thời gian tạo</th>
+        <th scope="col">Thời gian xoá</th>
       </tr>
     </thead>
     <tbody>
@@ -18,23 +18,20 @@
           <th scope="row">{{sum @index 1}}</th>
           <td>{{this.name}}</td>
           <td>{{this.level}}</td>
-          <td>{{this.updatedAt}}</td>
-          <td><a
-              href="/course/edit/{{this._id}}"
-              class="btn btn-link"
-            >Sửa</a></td>
-          <td><a
+          <td>{{this.deletedAt}}</td>
+          <td colspan="2"><a
               href=""
+              id="res-btn"
               class="btn btn-link"
               data-toggle="modal"
               data-id="{{this._id}}"
               data-target="#delete-course-modal"
-            >Xoá</a></td>
+            >Khôi phục | Xoá vĩnh viễn</a></td>
         </tr>
-        {{else}}
+      {{else}}
         <tr>
-          <td class="text-center" colspan="5">Bạn chưa đăng khoá học nào!
-            <a href="/course/new">Đăng khoá học tại đây</a>
+          <td class="text-center" colspan="5">Không có khoá học nào trong thùng
+            rác!
           </td>
         </tr>
       {{/each}}
@@ -58,20 +55,25 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>bạn có chắc chắn muốn xoá khoá học này không</p>
+        <p>Bạn muốn khôi phục hay xoá khoá học</p>
       </div>
       <div class="modal-footer">
         <button
           type="button"
-          class="btn btn-secondary"
-          data-dismiss="modal"
-        >Cancel</button>
-        <button id="del-btn-agree" type="button" class="btn btn-danger">Agree</button>
+          id="del-btn-del"
+          
+          class="btn btn-danger"
+        >Xoá hẳn</button>
+        <button
+          id="del-btn-restore"
+          type="button"
+          class="btn btn-primary"
+        >Khôi phục</button>
       </div>
     </div>
   </div>
 </div>
-{{!-- form delete --}}
+{{! form delete }}
 <form name="delete-course-form" method="POST"></form>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
@@ -84,10 +86,15 @@
       var id = button.data('id');
       courseId = id;
     })
-    var btnDelCourse= document.getElementById("del-btn-agree");
+    var btnDelCourse= document.getElementById("del-btn-del");
+    var btnResCourse= document.getElementById("del-btn-restore");
 
+    btnResCourse.onclick= function() {
+      deleteForm.action = "/course/" + courseId + "?_method=PATCH";
+      deleteForm.submit();
+    }
     btnDelCourse.onclick= function() {
-      deleteForm.action = "/course/" + courseId + "?_method=DELETE";
+      deleteForm.action = "/course/force/" + courseId + "?_method=DELETE";
       deleteForm.submit();
     }
   })
